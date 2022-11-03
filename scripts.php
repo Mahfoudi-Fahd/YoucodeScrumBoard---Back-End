@@ -14,8 +14,8 @@
     {
         $index=1;
         require('database.php');
-        $sql="SELECT * from tasks";
-        $query=mysqli_query($conn,$sql); //requete sql
+        $sql="SELECT * from tasks";//requete sql
+        $query=mysqli_query($conn,$sql); 
         while($row=mysqli_fetch_assoc($query)){
             
             //CODE HERE
@@ -23,11 +23,11 @@
                 if($status==1){$icon="fa-regular fa-clock ms-10px";};
                 if($status==2){$icon="spinner-border spinner-border-sm ms-10px";};
                 if($status==3){$icon="fa-regular fa-circle-check ms-10px";};
-                if($row['status_id']==$status){
+                
                     $priority = $row['priority_id'] == 1 ? 'Low' : ($row['priority_id'] == 2 ? 'Medium' : ($row['priority_id'] == 3 ? 'High' : 'Critical'));
                     $type = $row['type_id'] == 1 ? 'Feature' : 'Bug';
                     $id = $row['id'];
-                    echo '<button class="d-flex w-100 border-0 border-top"  href="#modal-task" data-bs-toggle="modal" onclick="edit(' . $id . ')" data-status =' . $row["status_id"] . ' id=' . $row['id'] . '>
+                    echo '<button class="d-flex w-100 border-0 border-top"  href="#modal-task" data-bs-toggle="modal" onclick="edit('. $id .')" data-status ='. $row["status_id"].' id=' . $row['id'] . '>
                         <div class="text-green fs-4 px-2">
                             <i class="' . $icon . '"></i> 
                         </div>
@@ -43,12 +43,25 @@
                             </div>
                         </div>
                     </button>';
-                }
+                
                 
                 }
         }
         //SQL SELECT
     }
+
+
+    function counthg($nb)
+{
+    include('database.php');
+   
+    $sql = "SELECT  COUNT(*) As nbrow from tasks where status_id=$nb";
+            
+    $query=mysqli_query($conn, $sql);
+    $row=mysqli_fetch_assoc($query);
+    echo $row['nbrow'];
+
+}
 
                 
     function saveTask()
@@ -70,7 +83,7 @@
         //SQL INSERT
         $_SESSION['message'] = "Task has been added successfully !";
 		header('location: index.php');
-
+        
     }
 
     function updateTask()
